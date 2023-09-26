@@ -248,7 +248,7 @@
 
 <body>
     <div id="main">
-        <h1 style="text-align: center;">Roomba Map Viewer</h1>
+        <h1 style="text-align: center;">PyRoomba</h1>
         <form id="login-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username">
@@ -258,10 +258,10 @@
         </form>
         <div id="map-view" style="display:none;">
             <div id="map-buttons">
-                <button class="map-btn" id="get-map">Get Map</button>
+                <button class="map-btn" id="get-map">Distinct Map</button>
                 <button class="map-btn" id="get-info">Info</button>
                 <button class="map-btn" id="get-mission">Mission History</button>
-                <button class="map-btn" id="refresh-map">Refresh Map</button>
+                <button class="map-btn" id="get-time-estimation">Map Time estimation</button>
             </div>
         </div>
 
@@ -269,115 +269,77 @@
             <div id="map-container">
                 <img id="map-image" src="" alt="Map Image" style="display: none;">
             </div>
+        </div>
 
+        <div class="table-responsive" id="details" style="background-color: #f9f9f9; padding: 20px;display: none;">
+            <h2 id="header_detail"style="text-align: center;">Map Details</h2>
+            <table style="width:100%; border: 1px solid black;">
+                <tr>
+                </tr>
+                <tr>
+                    <td id="mission"> Mission No.</td>
+                    <td id="mission_id"></td>
+                </tr>
+                <tr>
+                    <td id="chrgs">Charged during Mission</td>
+                    <td id="chrgs_val"></td>
+                </tr>
+                <tr>
+                    <td id="dirt">Dirt Detected</td>
+                    <td id="dirts"></td>
+                </tr>
 
-            <div class="table-responsive" id="details" style="background-color: #f9f9f9; padding: 20px;display: none;">
-                <h2>Map Details</h2>
-                <table style="width:100%; border: 1px solid black;">
-                    <tr>
-                    </tr>
-                    <tr>
-                        <td>id</td>
-                        <td id="id">q78I3SeVSEqgBMqSXAjGCg</td>
-                    </tr>
-                    <tr>
-                        <td>version</td>
-                        <td id="version">230724T200618</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td id="name">Bitlab 1</td>
-                    </tr>
-                    <tr>
-                        <td>learning_percentage</td>
-                        <td id="learning_percentage">100</td>
-                    </tr>
-                    <tr>
-                        <td>create_time</td>
-                        <td id="create_time">1690229184</td>
-                    </tr>
-                    <tr>
-                        <td>resolution</td>
-                        <td id="resolution">0.1049</td>
-                    </tr>
-                    <tr>
-                        <td>user_orientation_rad</td>
-                        <td id="user_orientation_rad">0.0</td>
-                    </tr>
-                    <tr>
-                        <td>robot_orientation_rad</td>
-                        <td id="robot_orientation_rad">4.9741</td>
-                    </tr>
-                    <tr>
-                        <td>area</td>
-                        <td id="area">4.1336</td>
-                    </tr>
-                    <tr>
-                        <td>nmssn</td>
-                        <td id="nmssn">57</td>
-                    </tr>
-                    <tr>
-                        <td>mission_id</td>
-                        <td id="mission_id">01H64QX2PR6EX2A08F906Y95FB</td>
-                    </tr>
-                </table>
-            </div>
+                <tr>
+                    <td id="dock_start">Started from Dock</td>
+                    <td id="dockedAtStart_val"></td>
+                </tr>
+        
+                <tr>
+                    <td id="done">Completed Task </td>
+                    <td id="done_val"></td>
+                </tr>
+               
+                <tr>
+                    <td id="durationM">Duration</td>
+                    <td id="durationM_val"></td>
+                </tr>
 
+                <tr>
+                    <td id="start_time">Start Time</td>
+                    <td id="start_time_val"></td>
+                </tr>
+        
+                <tr>
+                    <td id="end_time">End Time</td>
+                    <td id="end_time_val"></td>
+                </tr>
+                <tr>
+                    <td id="evacs">Bin Cleaned</td>
+                    <td id="evacs_val"></td>
+                </tr>
+                <tr>
+                    <td id="initiator">Initiator</td>
+                    <td id="initiator_val"></td>
+                </tr>
 
-            <div class="table-responsive" id="map_details" style="background-color: #f9f9f9; padding: 20px;display: none;">
-                <h2>Map Details</h2>
-                <table style="width:100%; border: 1px solid black;">
-                    <tr>
-                    </tr>
-                    <tr>
-                        <td>chrgs</td>
-                        <td id="chrgs">q78I3SeVSEqgBMqSXAjGCg</td>
-                    </tr>
-                    <tr>
-                        <td>dockedAtStart</td>
-                        <td id="dockedAtStart">230724T200618</td>
-                    </tr>
-                    <tr>
-                        <td>done</td>
-                        <td id="done">Bitlab 1</td>
-                    </tr>
-                    <tr>
-                        <td>doneM</td>
-                        <td id="doneM">100</td>
-                    </tr>
-                    <tr>
-                        <td>eDock</td>
-                        <td id="eDock">1690229184</td>
-                    </tr>
-                    <tr>
-                        <td>sts</td>
-                        <td id="sts">0.1049</td>
-                    </tr>
-                    <tr>
-                        <td>ets</td>
-                        <td id="ets">0.0</td>
-                    </tr>
-                    <tr>
-                        <td>run_time</td>
-                        <td id="run_time">4.9741</td>
-                    </tr>
-                    <tr>
-                        <td>area</td>
-                        <td id="area">4.1336</td>
-                    </tr>
-                    <tr>
-                        <td>bin_cleaned</td>
-                        <td id="bin_cleaned">57</td>
-                    </tr>
-                    <tr>
-                        <td>dirt_detected</td>
-                        <td id="dirt_detected">01H64QX2PR6EX2A08F906Y95FB</td>
-                    </tr>
-                </table>
-            </div>
+                <tr>
+                    <td id="pauseM">Pause Time</td>
+                    <td id="pauseM_val"></td>
+                </tr>
 
+                <tr>
+                    <td id="sqft">Area (sqft)</td>
+                    <td id="sqft_val"></td>
+                </tr>
 
- 
+                <tr>
+                    <td id="object">Detected Object</td>
+                    <td id="detected_obj"></td>
+                </tr>
+
+               
+
+            </table>
         </div>
 
 
@@ -422,29 +384,30 @@
                 <span class="modal-text">Loading...</span>
             </div>
         </div>
+
+
+        <table id="map_est_tbl" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Robot ID</th>
+                    <th>Map ID</th>
+                    <th>Region ID</th>
+                    <th>Time Estimate (seconds)</th>
+                    <th>Confidence</th>
+                    <th>Params</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+
+
+
     </div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
 
-        
-        document.getElementById('get-info').addEventListener('click', async () => {
-
-        const info_response = await fetch('/info');
-        const infoData = await info_response.json();
-        const robot_id = infoData.robot_id;
-        document.getElementById('info-container').style.display = 'block';
-        const table = document.getElementById('info-table');
-        const row = table.insertRow(-1);
-        document.getElementById('robot_id').textContent = infoData.robot_id;
-        document.getElementById('robot_password').textContent = infoData.robot_password;
-        document.getElementById('robot_sku').textContent = infoData.sku;
-        document.getElementById('robot_certificate').textContent = infoData.user_cert;
-        document.getElementById('robot_sw_version').textContent = infoData.soft_version;
-        document.getElementById('robot_name').textContent = infoData.robot_name;
-
-        });
-
-        document.getElementById('login-form').addEventListener('submit', async (event) => {
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -473,96 +436,14 @@
             }
         });
 
-        document.getElementById('get-map').addEventListener('click', async () => {
-         
-            const modal = document.getElementById('waiting-modal');
-            modal.style.display = 'block';
-            try{
-                const mapContainer = document.getElementById('map-container');
-                const mapImage = document.getElementById('map-image');
-                const response = await fetch('/maps');
-                const mapsData = await response.json();
-            
-                const robotID = mapsData[0].robot_id;
-                let allMaps = mapsData.map(item => item.map);
-                let table = document.getElementById('data-table') || document.createElement('table');
-                table.id = 'data-table';
-                table.innerHTML = '';
-                for (let i = 0; i < allMaps.length; i++) {
-                    let row = document.createElement('tr');
-                    console.log(row);
-                    for (let j = 0; j < allMaps[i].length; j++) {
-                        let cell = document.createElement('td');
-                        let cellText = document.createElement('a');
-                        cellText.href = "#";
-                        cellText.textContent = allMaps[i][j];
-                        cellText.dataset.i = i;
-                        cellText.dataset.j = j;
-                        cell.appendChild(cellText);
-                        row.appendChild(cell);
-                    } 
-                    row.addEventListener('click', function (e) {
-                        alert("mapDetails Clicked");
-                    setTimeout(() => {
-                        let rowIndex = e.target.dataset.i;
-                        let rowData = allMaps[rowIndex];
-                        console.log("rowData",rowData);
-                        console.log(`Row values for row ${rowIndex}: ${rowData.join(', ')}`);
-                        async function fetchData() {
-                            const pmapID = rowData[0];
-                            const pmapv = rowData[1];
-                            console.log("pmadId==>", pmapID);
-                            console.log("pmapv==>",pmapv);
-                            console.log("robotID==>",robotID)
-                            const mapResponse = await fetch(`/view_map/${robotID}/${pmapID}/${pmapv}`);
-                            document.getElementById('map-image').style.display = 'block';
-                            const blob = await mapResponse.blob(); // assuming the server returns a blob
-                            let blobUrl = URL.createObjectURL(blob);
-                            const img = document.getElementById('map-image');
-                            img.src = blobUrl;
-                            img.style.display = 'block';
-                            const mapResponse2 = await fetch(`/view_map_brief/${robotID}/${pmapID}/${pmapv}`);
-                            console.log("mapResponse2==>",mapResponse2);
-                            if (mapResponse2.ok) {
-                                const data = await mapResponse2.json();
-                                const map_name = data.map_name;
-                                document.getElementById('details').style.display = 'block';
-                                document.getElementById('id').textContent = data.id;
-                                document.getElementById('version').textContent = data.version;
-                                document.getElementById('name').textContent = data.map_name;
-                                document.getElementById('learning_percentage').textContent = data.learning_percentage;
-                                document.getElementById('create_time').textContent = data.create_time;
-                                document.getElementById('resolution').textContent = data.resolution;
-                                document.getElementById('user_orientation_rad').textContent = data.user_orientation_rad;
-                                document.getElementById('robot_orientation_rad').textContent = data.robot_orientation_rad;
-                                document.getElementById('area').textContent = data.area;
-                                document.getElementById('nmssn').textContent = data.nmssn;
-                                document.getElementById('mission_id').textContent = data.mission_id;
-                            } else {
-                                console.error(`Error: ${mapResponse2.status}`);
-                            }
-                        }
-                        fetchData();
 
-                    });
-                });
-                
 
-                    table.appendChild(row);
-                } 
-                mapContainer.insertBefore(table, mapImage); 
-            
-            } catch (error) {
-                console.error(error);
-            } finally {
-                modal.style.display = 'none';
-            }
+    document.getElementById('get-mission').addEventListener('click', async () => {
 
-        });
 
-        document.getElementById('get-mission').addEventListener('click', async () => {
+            const mapContainer = document.getElementById('map-container');
+            const mapImage = document.getElementById('map-image');
 
-            alert("get-mission-clicked");
             const info_mission = await fetch('/mission_history');
             const infoMission = await info_mission.json();
             console.log(infoMission);
@@ -591,6 +472,7 @@
                 missionIdCell.addEventListener('click', async function () {
                     let missionId = this.innerHTML; // or this.textContent
                     alert('You clicked on Mission ID: ' + missionId);
+
                     const response = await fetch('/mission_details', {
                         method: 'POST',
                         headers: {
@@ -601,82 +483,23 @@
                         })
                     });
                     const data = await response.json();
-                    console.log(data);
-
-
-
-
-                    const modal = document.createElement('div');
-                    modal.classList.add('modal');
-                    modal.innerHTML = `
-                    <div class="modal-content">
-                        <span class="close">&times;</span>   
-                        <h2>Mission Details</h2>
-                        <div id="details"></div>
-                    </div>
-                    `;
-                    document.body.appendChild(modal);
-                    // Style modal 
-                    modal.style.position = 'fixed';
-                    modal.style.top = '0';
-                    modal.style.left = '0';
-                    modal.style.width = '100%';
-                    modal.style.height = '100%';
-                    modal.style.background = 'rgba(0,0,0,0.5)';
-
-                    // Get modal content
-                    const modalContent = modal.querySelector('.modal-content');
-                    modalContent.style.background = '#fff';
-                    modalContent.style.width = '80%';
-                    //...other content styles  
-
-                    // Get close button
-                    const closeBtn = modal.querySelector('.close');
-                    closeBtn.style.position = 'absolute';
-                    //...other close button styles
-
-                    // Get title
-                    const title = modalContent.querySelector('h2');
-                    title.style.marginTop = '0';
-
-                    // Get details
-                    const details = modalContent.querySelector('#details');
-                    details.style.lineHeight = '1.6';
-
-                    // Media query
-                    if (window.innerWidth < 500) {
-                        modalContent.style.width = '90%';
-                    }
-
-                    const close = modal.querySelector('.close');
-                    close.addEventListener('click', () => modal.remove());
-                    const detailsElem = modal.querySelector('#details');
-                    detailsElem.innerHTML += `<b>chrgs:</b> ${data.chrgs}<br>`;
-                    detailsElem.innerHTML += `<b>dockedAtStart:</b> ${data.dockedAtStart}<br>`;
-                    detailsElem.innerHTML += `<b>done:</b> ${data.done}<br>`;
-                    detailsElem.innerHTML += `<b>doneM:</b> ${data.doneM}<br>`;
-                    detailsElem.innerHTML += `<b>eDock:</b> ${data.eDock}<br>`;
-                    detailsElem.innerHTML += `<b>Initiator:</b> ${data.initiator}<br>`;
-                    detailsElem.innerHTML += `<b>Start Time:</b> ${data.start_time}<br>`;
-                    detailsElem.innerHTML += `<b>End Time:</b> ${data.end_time}<br>`;
-                    detailsElem.innerHTML += `<b>Run Time:</b> ${data.runM}<br>`;
-                    detailsElem.innerHTML += `<b>Area(sq.Ft):</b> ${data.sqft}<br>`;
-                    detailsElem.innerHTML += `<b>Bin Cleaned:</b> ${data.evacs}<br>`;
-                    detailsElem.innerHTML += `<b>Dirt Detected :</b> ${data.dirt}<br>`;
-                    detailsElem.innerHTML += `<b>Detected Object:</b><br>`;
-                    for (let key in data.extracted_data) {
-                        detailsElem.innerHTML += `${key}: ${data.extracted_data[key]}<br>`;
-                    }
-                    modal.style.display = 'block';
-                    
-
-
-
-
+                    console.log("Mission_Details===>",data);    
                     robotID = data.robotId;
                     pmapID = data.pmap_id;
                     pmapv = data.pmapv;
+                    pmaps_robot = data.pmaps_robot
+                    console.log("pmaps_robot",pmaps_robot);
+
+                    console.log("pmadId",pmapID);
+                    console.log("pmapv",pmapv);
+
+                    dirt_val = data.dirt;
+                    dock_start = data.dockedAtStart;
+                    done_job = data.done;
                     console.log("robot-details==>",robotID);
+                    console.log("dirt_val",dirt_val);
+                    console.log("dock_start",dock_start);
+                    console.log("done_job",done_job);
                     const mapContainer = document.getElementById('map-container');
                     const mapImage = document.getElementById('map-image');
                     const mapResponse3 = await fetch(`/view_map/${robotID}/${pmapID}/${pmapv}`);
@@ -687,21 +510,38 @@
                             const img = document.getElementById('map-image');
                             img.src = blobUrl;
                             img.style.display = 'block';
+                    
+                    document.getElementById('details').style.display = 'block';
+                    const header_detail = document.getElementById('header_detail');
+                    header_detail.textContent = 'Mission Details';
+                    document.getElementById('mission_id').textContent =missionId
+                    document.getElementById('chrgs_val').textContent = data.chrgs;
+                    document.getElementById('dirts').textContent = dirt_val;
+                    document.getElementById('dockedAtStart_val').textContent = dock_start;
+                    document.getElementById('done_val').textContent = done_job;
+                    document.getElementById('durationM_val').textContent = data.durationM;
+                    document.getElementById('start_time_val').textContent = data.start_time;
+                    document.getElementById('end_time_val').textContent = data.end_time;
+                    document.getElementById('evacs_val').textContent = data.evacs;
+                    document.getElementById('initiator_val').textContent = data.initiator;
+                    document.getElementById('pauseM_val').textContent = data.durationM;
+                    document.getElementById('sqft_val').textContent = data.sqft;
+                    const detectedElem = document.getElementById('detected_obj');
+                    let extractedStr = '\n';
+                    // Loop through data
+                    for (let key in data.extracted_data) {
+                    extractedStr += `${key}:\n`;
+                    extractedStr += `${data.extracted_data[key]}\n`;
+                    }
 
-                   
+                    // Set element text
+                    detectedElem.textContent = extractedStr;
 
+                  
+             
                 });
 
-
-                // countCell.addEventListener('click', function () {
-                //     let clickedValue = this.innerHTML; // or this.textContent
-                //     alert('You clicked on Mission Number: ' + clickedValue);
-                // });
-
-                // countCell.addEventListener('click', function () {
-                //     let clickedValue = this.innerHTML; // or this.textContent
-                //     alert('You clicked on Mission Time: ' + clickedValue);
-                // });
+               
 
                 let missionData = infoMission.mission_id[i];
                 missionIdCell.innerHTML = missionData[0];
@@ -709,8 +549,194 @@
                 timeCell.innerHTML = missionData[2];
 
             }
-
+       //mapContainer.insertBefore(table, mapImage); 
         });
+
+    document.getElementById('get-map').addEventListener('click', async () => {
+         
+         const modal = document.getElementById('waiting-modal');
+         modal.style.display = 'block';
+         try{
+             const mapContainer = document.getElementById('map-container');
+             const mapImage = document.getElementById('map-image');
+             const response = await fetch('/maps');
+             const mapsData = await response.json();
+         
+             const robotID = mapsData[0].robot_id;
+             let allMaps = mapsData.map(item => item.map);
+             let table = document.getElementById('data-table') || document.createElement('table');
+             table.id = 'data-table';
+             table.innerHTML = '';
+             for (let i = 0; i < allMaps.length; i++) {
+                 let row = document.createElement('tr');
+                 console.log(row);
+                 for (let j = 0; j < allMaps[i].length; j++) {
+                     let cell = document.createElement('td');
+                     let cellText = document.createElement('a');
+                     cellText.href = "#";
+                     cellText.textContent = allMaps[i][j];
+                     cellText.dataset.i = i;
+                     cellText.dataset.j = j;
+                     cell.appendChild(cellText);
+                     row.appendChild(cell);
+                 } 
+                 row.addEventListener('click', function (e) {
+                     alert("mapDetails Clicked");
+                 setTimeout(() => {
+                     let rowIndex = e.target.dataset.i;
+                     let rowData = allMaps[rowIndex];
+                     console.log("rowData",rowData);
+                     console.log(`Row values for row ${rowIndex}: ${rowData.join(', ')}`);
+                     async function fetchData() {
+                         const pmapID = rowData[0];
+                         const pmapv = rowData[1];
+                         console.log("pmadId==>", pmapID);
+                         console.log("pmapv==>",pmapv);
+                         console.log("robotID==>",robotID)
+                         const mapResponse = await fetch(`/view_map/${robotID}/${pmapID}/${pmapv}`);
+                         document.getElementById('map-image').style.display = 'block';
+                         const blob = await mapResponse.blob(); // assuming the server returns a blob
+                         let blobUrl = URL.createObjectURL(blob);
+                         const img = document.getElementById('map-image');
+                         img.src = blobUrl;
+                         img.style.display = 'block';
+                         const mapResponse2 = await fetch(`/view_map_brief/${robotID}/${pmapID}/${pmapv}`);
+                         console.log("mapResponse2==>",mapResponse2);
+                         if (mapResponse2.ok) {
+                             const data = await mapResponse2.json();
+                             console.log("dataforDistinctMap==",data);
+                             const map_name = data.map_name;
+                             document.getElementById('details').style.display = 'block';
+                             document.getElementById('mission').textContent = "Pmap Id";
+                             document.getElementById('chrgs').textContent = "Pmapv Id";
+                             document.getElementById('dirt').textContent = "Map Name";
+                             document.getElementById('dock_start').textContent = "Learning Percentage";
+                             document.getElementById('done').textContent = "Create Time";
+                             document.getElementById('durationM').textContent = "Resolution";
+                             document.getElementById('start_time').textContent = "User Orientation Rad";
+                             
+                             
+                             document.getElementById('evacs').textContent = "Robot Orientation Rad";
+                             document.getElementById('initiator').textContent = "Area (sq.ft)";
+                             document.getElementById('pauseM').textContent = "No of Mission";
+                             document.getElementById('sqft').textContent = "Mission Id";
+
+
+
+                             document.getElementById('mission_id').textContent = data.id;
+                             document.getElementById('chrgs_val').textContent = data.version;
+                             document.getElementById('dirts').textContent = data.map_name;
+                             document.getElementById('dockedAtStart_val').textContent = data.learning_percentage;
+                             document.getElementById('done_val').textContent = data.create_time;
+                             document.getElementById('durationM_val').textContent = data.resolution;
+                             document.getElementById('start_time_val').textContent = data.user_orientation_rad;
+                             document.getElementById('evacs_val').textContent = data.robot_orientation_rad;
+                             document.getElementById('initiator_val').textContent = data.area;
+                             document.getElementById('pauseM_val').textContent = data.nmssn;
+                             document.getElementById('sqft_val').textContent = data.mission_id;
+
+
+
+                            document.getElementById('pauseM').style.display = 'none';
+                            document.getElementById('sqft').style.display = 'none'; 
+                            document.getElementById('pauseM_val').style.display = 'none';
+                            document.getElementById('sqft_val').style.display = 'none'; 
+
+                            document.getElementById('end_time').style.display = 'none';
+                            document.getElementById('end_time_val').style.display = 'none';
+
+
+                            document.getElementById('object').style.display = 'none';
+                            document.getElementById('detected_obj').style.display = 'none';
+
+
+                         } else {
+                             console.error(`Error: ${mapResponse2.status}`);
+                         }
+                     }
+                     fetchData();
+
+                 });
+             });
+             
+
+                 table.appendChild(row);
+             } 
+             mapContainer.insertBefore(table, mapImage); 
+         
+         } catch (error) {
+             console.error(error);
+         } finally {
+             modal.style.display = 'none';
+         }
+
+     });
+
+
+    document.getElementById('get-info').addEventListener('click', async () => {
+
+        const info_response = await fetch('/info');
+        const infoData = await info_response.json();
+        const robot_id = infoData.robot_id;
+        document.getElementById('info-container').style.display = 'block';
+        const table = document.getElementById('info-table');
+        const row = table.insertRow(-1);
+        document.getElementById('robot_id').textContent = infoData.robot_id;
+        document.getElementById('robot_password').textContent = infoData.robot_password;
+        document.getElementById('robot_sku').textContent = infoData.sku;
+        document.getElementById('robot_certificate').textContent = infoData.user_cert;
+        document.getElementById('robot_sw_version').textContent = infoData.soft_version;
+        document.getElementById('robot_name').textContent = infoData.robot_name;
+
+});
+
+
+
+  document.getElementById('get-time-estimation').addEventListener('click', async () => {
+        const time_estimation_response = await fetch('/time_estimation');
+        const time_estimationData = await time_estimation_response.json();
+        console.log("time_estimation==>",time_estimationData)
+
+        document.getElementById('map_est_tbl').style.display = 'block';
+        const tableBody = document.getElementById('tableBody');
+
+        time_estimationData.pmaps.forEach(pmap => {
+    pmap.regions.forEach(region => {
+        region.time_estimates.forEach(estimate => {
+            const row = document.createElement('tr');
+
+            const robotIdCell = document.createElement('td');
+            robotIdCell.textContent = time_estimationData.robot_id;
+            row.appendChild(robotIdCell);
+
+            const mapIdCell = document.createElement('td');
+            mapIdCell.textContent = pmap.pmap_id;
+            row.appendChild(mapIdCell);
+
+            const regionIdCell = document.createElement('td');
+            regionIdCell.textContent = region.region_id;
+            row.appendChild(regionIdCell);
+
+            const estimateCell = document.createElement('td');
+            estimateCell.textContent = estimate.estimate;
+            row.appendChild(estimateCell);
+
+            const confidenceCell = document.createElement('td');
+            confidenceCell.textContent = estimate.confidence;
+            row.appendChild(confidenceCell);
+
+            const paramsCell = document.createElement('td');
+            paramsCell.textContent = JSON.stringify(estimate.params);
+            row.appendChild(paramsCell);
+
+            tableBody.appendChild(row);
+        });
+    });
+});
+           
+});
+
+
 
     </script>
 </body>

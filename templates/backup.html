@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <title>Roomba Map Viewer</title>
+</head>
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #f1f1f1;
+    }
+
+    #main {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        background: #ffffff;
+    }
+
+    #main.full-width {
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+    }
+
+    #map-view {
+        display: none;
+        text-align: left;
+        /* Align the button to the left */
+        margin-top: 20px;
+    }
+
+    #get-map {
+        background-color: black;
+        border: none;
+        color: white;
+        /* White text color */
+        padding: 6px 12px;
+        /* Smaller padding to make the button smaller */
+        text-align: center;
+        /* Centered text */
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        /* Slightly smaller font size */
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        /* Rounded corners */
+        transition-duration: 0.4s;
+        /* Transition effect */
+    }
+
+    #map-view,
+    #map-container,
+    #details {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    h1,
+    h2 {
+        color: #007BFF;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    button[type="submit"] {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    button[type="submit"] {
+        background-color: #007BFF;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .table-responsive {
+        max-width: 100%;
+        overflow-x: auto;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    #map-view,
+    #details {
+        margin-top: 20px;
+    }
+
+    #map-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .map-btn {
+        background-color: black;
+        border: none;
+        color: white;
+        /* White text color */
+        padding: 6px 12px;
+        /* Smaller padding to make the button smaller */
+        text-align: center;
+        /* Centered text */
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        /* Slightly smaller font size */
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        /* Rounded corners */
+        transition-duration: 0.4s;
+        /* Transition effect */
+        flex-grow: 1;
+        text-align: center;
+        margin: 5px;
+    }
+
+    .map-btn:hover {
+        background-color: #0056b3;
+    }
+
+    #content-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    #map-container {
+        flex: 1 1 40%;
+        max-width: 40%;
+        margin-right: 10px;
+    }
+
+    .table-responsive {
+        flex: 1 1 40%;
+        max-width: 40%;
+        margin-left: 10px;
+    }
+
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 16px;
+        background-color: white;
+        text-align: center;
+    }
+
+    .modal-text {
+        color: black;
+    }
+
+
+    @media screen and (max-width: 800px) {
+
+        #map-container,
+        .table-responsive {
+            flex: 1 0 100%;
+            max-width: 100%;
+        }
+    }
+
+
+    @media (max-width: 768px) {
+        .map-btn {
+            flex-basis: 100%;
+            margin-bottom: 10px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #main {
+            padding: 10px;
+        }
+
+        h1,
+        h2 {
+            font-size: 24px;
+        }
+
+        form {
+            max-width: 100%;
+        }
+
+        .table-responsive {
+            padding: 10px;
+        }
+
+        td {
+            padding: 5px;
+        }
+    }
+</style>
+
+<body>
+    <div id="main">
+        <h1 style="text-align: center;">Roomba Map Viewer</h1>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <button type="submit">Log in</button>
+        </form>
+        <div id="map-view" style="display:none;">
+            <div id="map-buttons">
+                <button class="map-btn" id="get-map">Get Map</button>
+                <button class="map-btn" id="get-info">Info</button>
+                <button class="map-btn" id="get-mission">Mission History</button>
+                <button class="map-btn" id="refresh-map">Refresh Map</button>
+            </div>
+        </div>
+
+        <div id="content-container">
+            <div id="map-container">
+                <img id="map-image" src="" alt="Map Image" style="display: none;">
+            </div>
+
+
+            <div class="table-responsive" id="details" style="background-color: #f9f9f9; padding: 20px;display: none;">
+                <h2>Map Details</h2>
+                <table style="width:100%; border: 1px solid black;">
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td>id</td>
+                        <td id="id">q78I3SeVSEqgBMqSXAjGCg</td>
+                    </tr>
+                    <tr>
+                        <td>version</td>
+                        <td id="version">230724T200618</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td id="name">Bitlab 1</td>
+                    </tr>
+                    <tr>
+                        <td>learning_percentage</td>
+                        <td id="learning_percentage">100</td>
+                    </tr>
+                    <tr>
+                        <td>create_time</td>
+                        <td id="create_time">1690229184</td>
+                    </tr>
+                    <tr>
+                        <td>resolution</td>
+                        <td id="resolution">0.1049</td>
+                    </tr>
+                    <tr>
+                        <td>user_orientation_rad</td>
+                        <td id="user_orientation_rad">0.0</td>
+                    </tr>
+                    <tr>
+                        <td>robot_orientation_rad</td>
+                        <td id="robot_orientation_rad">4.9741</td>
+                    </tr>
+                    <tr>
+                        <td>area</td>
+                        <td id="area">4.1336</td>
+                    </tr>
+                    <tr>
+                        <td>nmssn</td>
+                        <td id="nmssn">57</td>
+                    </tr>
+                    <tr>
+                        <td>mission_id</td>
+                        <td id="mission_id">01H64QX2PR6EX2A08F906Y95FB</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="table-responsive" id="map_details" style="background-color: #f9f9f9; padding: 20px;display: none;">
+                <h2>Map Details</h2>
+                <table style="width:100%; border: 1px solid black;">
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td>chrgs</td>
+                        <td id="chrgs">q78I3SeVSEqgBMqSXAjGCg</td>
+                    </tr>
+                    <tr>
+                        <td>dockedAtStart</td>
+                        <td id="dockedAtStart">230724T200618</td>
+                    </tr>
+                    <tr>
+                        <td>done</td>
+                        <td id="done">Bitlab 1</td>
+                    </tr>
+                    <tr>
+                        <td>doneM</td>
+                        <td id="doneM">100</td>
+                    </tr>
+                    <tr>
+                        <td>eDock</td>
+                        <td id="eDock">1690229184</td>
+                    </tr>
+                    <tr>
+                        <td>sts</td>
+                        <td id="sts">0.1049</td>
+                    </tr>
+                    <tr>
+                        <td>ets</td>
+                        <td id="ets">0.0</td>
+                    </tr>
+                    <tr>
+                        <td>run_time</td>
+                        <td id="run_time">4.9741</td>
+                    </tr>
+                    <tr>
+                        <td>area</td>
+                        <td id="area">4.1336</td>
+                    </tr>
+                    <tr>
+                        <td>bin_cleaned</td>
+                        <td id="bin_cleaned">57</td>
+                    </tr>
+                    <tr>
+                        <td>dirt_detected</td>
+                        <td id="dirt_detected">01H64QX2PR6EX2A08F906Y95FB</td>
+                    </tr>
+                </table>
+            </div>
+
+
+ 
+        </div>
+
+
+        <div id="info-container" style="display: none;">
+            <table id="info-table" style="width:100%; border: 1px solid black;">
+                <tr>
+                </tr>
+                <tr>
+                    <td>robot_name</td>
+                    <td id="robot_name"></td>
+                </tr>
+                <tr>
+                    <td>robot_id</td>
+                    <td id="robot_id"></td>
+                </tr>
+                <tr>
+                    <td>robot_password</td>
+                    <td id="robot_password"></td>
+                </tr>
+                <tr>
+                    <td>robot_sku</td>
+                    <td id="robot_sku"></td>
+                </tr>
+                <tr>
+                    <td>robot_certificate</td>
+                    <td id="robot_certificate"></td>
+                </tr>
+                <tr>
+                    <td>robot_sw_version</td>
+                    <td id="robot_sw_version"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="mission-container" style="display: none;">
+            <table id="mission-table" style="width:100%; border: 1px solid black;">
+            </table>
+        </div>
+
+        <div id="waiting-modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-text">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+
+        
+       document.getElementById('get-info').addEventListener('click', async () => {
+
+        const info_response = await fetch('/info');
+        const infoData = await info_response.json();
+        const robot_id = infoData.robot_id;
+        document.getElementById('info-container').style.display = 'block';
+        const table = document.getElementById('info-table');
+        const row = table.insertRow(-1);
+        document.getElementById('robot_id').textContent = infoData.robot_id;
+        document.getElementById('robot_password').textContent = infoData.robot_password;
+        document.getElementById('robot_sku').textContent = infoData.sku;
+        document.getElementById('robot_certificate').textContent = infoData.user_cert;
+        document.getElementById('robot_sw_version').textContent = infoData.soft_version;
+        document.getElementById('robot_name').textContent = infoData.robot_name;
+
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.ok) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('map-view').style.display = 'block';
+                document.getElementById('main').classList.add('full-width');
+            } else {
+                alert('Login failed. Please check your credentials and try again.');
+            }
+
+            if (response.ok) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('map-view').style.display = 'block';
+            } else {
+                alert('Login failed. Please check your credentials and try again.');
+            }
+        });
+
+        document.getElementById('get-map').addEventListener('click', async () => {
+         
+            const modal = document.getElementById('waiting-modal');
+            modal.style.display = 'block';
+            try{
+                const mapContainer = document.getElementById('map-container');
+                const mapImage = document.getElementById('map-image');
+                const response = await fetch('/maps');
+                const mapsData = await response.json();
+            
+                const robotID = mapsData[0].robot_id;
+                let allMaps = mapsData.map(item => item.map);
+                let table = document.getElementById('data-table') || document.createElement('table');
+                table.id = 'data-table';
+                table.innerHTML = '';
+                for (let i = 0; i < allMaps.length; i++) {
+                    let row = document.createElement('tr');
+                    console.log(row);
+                    for (let j = 0; j < allMaps[i].length; j++) {
+                        let cell = document.createElement('td');
+                        let cellText = document.createElement('a');
+                        cellText.href = "#";
+                        cellText.textContent = allMaps[i][j];
+                        cellText.dataset.i = i;
+                        cellText.dataset.j = j;
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    } 
+                    row.addEventListener('click', function (e) {
+                        alert("mapDetails Clicked");
+                    setTimeout(() => {
+                        let rowIndex = e.target.dataset.i;
+                        let rowData = allMaps[rowIndex];
+                        console.log("rowData",rowData);
+                        console.log(`Row values for row ${rowIndex}: ${rowData.join(', ')}`);
+                        async function fetchData() {
+                            const pmapID = rowData[0];
+                            const pmapv = rowData[1];
+                            console.log("pmadId==>", pmapID);
+                            console.log("pmapv==>",pmapv);
+                            console.log("robotID==>",robotID)
+                            const mapResponse = await fetch(`/view_map/${robotID}/${pmapID}/${pmapv}`);
+                            document.getElementById('map-image').style.display = 'block';
+                            const blob = await mapResponse.blob(); // assuming the server returns a blob
+                            let blobUrl = URL.createObjectURL(blob);
+                            const img = document.getElementById('map-image');
+                            img.src = blobUrl;
+                            img.style.display = 'block';
+                            const mapResponse2 = await fetch(`/view_map_brief/${robotID}/${pmapID}/${pmapv}`);
+                            console.log("mapResponse2==>",mapResponse2);
+                            if (mapResponse2.ok) {
+                                const data = await mapResponse2.json();
+                                const map_name = data.map_name;
+                                document.getElementById('details').style.display = 'block';
+                                document.getElementById('id').textContent = data.id;
+                                document.getElementById('version').textContent = data.version;
+                                document.getElementById('name').textContent = data.map_name;
+                                document.getElementById('learning_percentage').textContent = data.learning_percentage;
+                                document.getElementById('create_time').textContent = data.create_time;
+                                document.getElementById('resolution').textContent = data.resolution;
+                                document.getElementById('user_orientation_rad').textContent = data.user_orientation_rad;
+                                document.getElementById('robot_orientation_rad').textContent = data.robot_orientation_rad;
+                                document.getElementById('area').textContent = data.area;
+                                document.getElementById('nmssn').textContent = data.nmssn;
+                                document.getElementById('mission_id').textContent = data.mission_id;
+                            } else {
+                                console.error(`Error: ${mapResponse2.status}`);
+                            }
+                        }
+                        fetchData();
+
+                    });
+                });
+                
+
+                    table.appendChild(row);
+                } 
+                mapContainer.insertBefore(table, mapImage); 
+            
+            } catch (error) {
+                console.error(error);
+            } finally {
+                modal.style.display = 'none';
+            }
+
+        });
+
+        document.getElementById('get-mission').addEventListener('click', async () => {
+
+            alert("get-mission-clicked");
+            const info_mission = await fetch('/mission_history');
+            const infoMission = await info_mission.json();
+            console.log(infoMission);
+            document.getElementById('mission-container').style.display = 'block';
+            const table = document.getElementById('mission-table');
+            let thead = table.querySelector('thead');
+            if (!thead) {
+                thead = table.createTHead();
+            }
+            let headerRow = thead.insertRow();
+            let missionNumberHeader = headerRow.insertCell();
+            let missionIdHeader = headerRow.insertCell();
+            let missionTimeHeader = headerRow.insertCell();
+
+            missionNumberHeader.innerHTML = "Mission Number";
+            missionIdHeader.innerHTML = "Mission ID";
+            missionTimeHeader.innerHTML = "Mission Time";
+
+            for (let i = 0; i < infoMission.mission_id.length; i++) {
+
+                let row = table.insertRow();
+                let missionIdCell = row.insertCell(0);
+                let countCell = row.insertCell(1);
+                let timeCell = row.insertCell(2);
+
+                missionIdCell.addEventListener('click', async function () {
+                    let missionId = this.innerHTML; // or this.textContent
+                    alert('You clicked on Mission ID: ' + missionId);
+                    const response = await fetch('/mission_details', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            mission_id: missionId
+                        })
+                    });
+                    const data = await response.json();
+                    console.log(data);
+
+
+
+
+                    const modal = document.createElement('div');
+                    modal.classList.add('modal');
+                    modal.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close">&times;</span>   
+                        <h2>Mission Details</h2>
+                        <div id="details"></div>
+                    </div>
+                    `;
+                    document.body.appendChild(modal);
+                    // Style modal 
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100%';
+                    modal.style.height = '100%';
+                    modal.style.background = 'rgba(0,0,0,0.5)';
+
+                    // Get modal content
+                    const modalContent = modal.querySelector('.modal-content');
+                    modalContent.style.background = '#fff';
+                    modalContent.style.width = '80%';
+                    //...other content styles  
+
+                    // Get close button
+                    const closeBtn = modal.querySelector('.close');
+                    closeBtn.style.position = 'absolute';
+                    //...other close button styles
+
+                    // Get title
+                    const title = modalContent.querySelector('h2');
+                    title.style.marginTop = '0';
+
+                    // Get details
+                    const details = modalContent.querySelector('#details');
+                    details.style.lineHeight = '1.6';
+
+                    // Media query
+                    if (window.innerWidth < 500) {
+                        modalContent.style.width = '90%';
+                    }
+
+                    const close = modal.querySelector('.close');
+                    close.addEventListener('click', () => modal.remove());
+                    const detailsElem = modal.querySelector('#details');
+                    detailsElem.innerHTML += `<b>chrgs:</b> ${data.chrgs}<br>`;
+                    detailsElem.innerHTML += `<b>dockedAtStart:</b> ${data.dockedAtStart}<br>`;
+                    detailsElem.innerHTML += `<b>done:</b> ${data.done}<br>`;
+                    detailsElem.innerHTML += `<b>doneM:</b> ${data.doneM}<br>`;
+                    detailsElem.innerHTML += `<b>eDock:</b> ${data.eDock}<br>`;
+                    detailsElem.innerHTML += `<b>Initiator:</b> ${data.initiator}<br>`;
+                    detailsElem.innerHTML += `<b>Start Time:</b> ${data.start_time}<br>`;
+                    detailsElem.innerHTML += `<b>End Time:</b> ${data.end_time}<br>`;
+                    detailsElem.innerHTML += `<b>Run Time:</b> ${data.runM}<br>`;
+                    detailsElem.innerHTML += `<b>Area(sq.Ft):</b> ${data.sqft}<br>`;
+                    detailsElem.innerHTML += `<b>Bin Cleaned:</b> ${data.evacs}<br>`;
+                    detailsElem.innerHTML += `<b>Dirt Detected :</b> ${data.dirt}<br>`;
+                    detailsElem.innerHTML += `<b>Detected Object:</b><br>`;
+                    for (let key in data.extracted_data) {
+                        detailsElem.innerHTML += `${key}: ${data.extracted_data[key]}<br>`;
+                    }
+                    modal.style.display = 'block';
+                    
+
+
+
+
+                    robotID = data.robotId;
+                    pmapID = data.pmap_id;
+                    pmapv = data.pmapv;
+                    console.log("robot-details==>",robotID);
+                    const mapContainer = document.getElementById('map-container');
+                    const mapImage = document.getElementById('map-image');
+                    const mapResponse3 = await fetch(`/view_map/${robotID}/${pmapID}/${pmapv}`);
+                    console.log("mapResponse==>",mapResponse3);
+                    document.getElementById('map-image').style.display = 'block';
+                            const blob = await mapResponse3.blob(); // assuming the server returns a blob
+                            let blobUrl = URL.createObjectURL(blob);
+                            const img = document.getElementById('map-image');
+                            img.src = blobUrl;
+                            img.style.display = 'block';
+
+                   
+
+                });
+
+
+                // countCell.addEventListener('click', function () {
+                //     let clickedValue = this.innerHTML; // or this.textContent
+                //     alert('You clicked on Mission Number: ' + clickedValue);
+                // });
+
+                // countCell.addEventListener('click', function () {
+                //     let clickedValue = this.innerHTML; // or this.textContent
+                //     alert('You clicked on Mission Time: ' + clickedValue);
+                // });
+
+                let missionData = infoMission.mission_id[i];
+                missionIdCell.innerHTML = missionData[0];
+                countCell.innerHTML = missionData[1];
+                timeCell.innerHTML = missionData[2];
+
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>

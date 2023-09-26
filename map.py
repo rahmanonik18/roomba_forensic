@@ -293,6 +293,17 @@ typed_poses = {
     }
 }
 
+pose_data = {
+    "type": "pose2d_concise",
+    "list": [[0.3185, 3.3856, 1.6119]]
+}
+converted_pose = {
+    'coordinates': pose_data['list'][0][:2],
+    'ori_rad': pose_data['list'][0][2]
+}
+
+poses2d = [converted_pose]
+
 
 def plot_map(points2d, borders, poses2d):
     # Create figure and axes
